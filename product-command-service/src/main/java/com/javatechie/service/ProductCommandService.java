@@ -13,12 +13,16 @@ public class ProductCommandService {
     @Autowired
     private ProductRepository repository;
 
-    @Autowired
-    private KafkaTemplate<String,Object> kafkaTemplate;
+//    @Autowired
+//    private KafkaTemplate<String,Object> kafkaTemplate;
 
+    @Autowired
+    private KafkaTemplate<String, Object> kafkaTemplate;
+    
     public Product createProduct(ProductEvent productEvent){
         Product productDO = repository.save(productEvent.getProduct());
         ProductEvent event=new ProductEvent("CreateProduct", productDO);
+//        kafkaTemplate.send("product-event-topic", event);
         kafkaTemplate.send("product-event-topic", event);
         return productDO;
     }
